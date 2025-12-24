@@ -3,61 +3,537 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Tasks | Professional To-Do List</title>
+    <title>TaskFlow Pro | Enterprise Task Management</title>
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    
+    <!-- CSS -->
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✅</text></svg>">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22 fill=%22%236C63FF%22>📋</text></svg>">
+    
+    <!-- Meta tags for PWA -->
+    <meta name="theme-color" content="#6C63FF">
+    <meta name="description" content="Premium task management application with advanced features and beautiful interface">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1><i class="fas fa-tasks"></i> Nexus Tasks</h1>
-            <p>Stay organized and boost your productivity</p>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">✓</div>
+                    <h1>TaskFlow<span>Pro</span></h1>
+                </div>
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
             
-            <div class="stats">
-                <div class="stat-item">
-                    <div class="stat-value" id="totalTasks">0</div>
-                    <div class="stat-label">Total Tasks</div>
+            <div class="user-profile">
+                <div class="avatar">
+                    <img src="https://ui-avatars.com/api/?name=User&background=6C63FF&color=fff&bold=true" alt="User Avatar">
                 </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="completedTasks">0</div>
-                    <div class="stat-label">Completed</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="pendingTasks">0</div>
-                    <div class="stat-label">Pending</div>
+                <div class="user-info">
+                    <h3>Welcome back!</h3>
+                    <p>Ready to conquer today?</p>
                 </div>
             </div>
-        </header>
+            
+            <nav class="nav-menu">
+                <ul>
+                    <li class="nav-item active" data-view="dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </li>
+                    <li class="nav-item" data-view="tasks">
+                        <i class="fas fa-tasks"></i>
+                        <span>All Tasks</span>
+                        <span class="nav-badge" id="totalTasksBadge">0</span>
+                    </li>
+                    <li class="nav-item" data-view="today">
+                        <i class="fas fa-calendar-day"></i>
+                        <span>Today</span>
+                        <span class="nav-badge" id="todayTasksBadge">0</span>
+                    </li>
+                    <li class="nav-item" data-view="important">
+                        <i class="fas fa-star"></i>
+                        <span>Important</span>
+                        <span class="nav-badge" id="importantTasksBadge">0</span>
+                    </li>
+                    <li class="nav-item" data-view="completed">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Completed</span>
+                        <span class="nav-badge" id="completedTasksBadge">0</span>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="progress-card">
+                    <div class="progress-header">
+                        <h4>Weekly Progress</h4>
+                        <span class="progress-percent">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                    <p class="progress-text">Complete more tasks to increase productivity</p>
+                </div>
+                
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                    <span>Dark Mode</span>
+                </button>
+            </div>
+        </aside>
         
-        <div class="app-body">
-            <div class="input-section">
-                <input type="text" id="taskInput" placeholder="Enter a new task...">
-                <button id="addBtn"><i class="fas fa-plus-circle"></i> Add Task</button>
-            </div>
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Header -->
+            <header class="main-header">
+                <div class="header-left">
+                    <h2 class="page-title" id="pageTitle">Dashboard</h2>
+                    <p class="page-subtitle" id="pageSubtitle">Your productivity overview</p>
+                </div>
+                
+                <div class="header-actions">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="taskSearch" placeholder="Search tasks...">
+                    </div>
+                    
+                    <div class="header-buttons">
+                        <button class="btn-icon" id="notificationBtn">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-dot"></span>
+                        </button>
+                        <button class="btn-icon" id="settingsBtn">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                    </div>
+                </div>
+            </header>
             
-            <div class="filter-buttons">
-                <button class="filter-btn active" data-filter="all">All Tasks</button>
-                <button class="filter-btn" data-filter="pending">Pending</button>
-                <button class="filter-btn" data-filter="completed">Completed</button>
-            </div>
+            <!-- Dashboard View -->
+            <section class="view-section active" id="dashboardView">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #6C63FF, #8A84FF);">
+                            <i class="fas fa-list-check"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalTasks">0</h3>
+                            <p>Total Tasks</p>
+                        </div>
+                        <div class="stat-trend up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>12%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #4CAF50, #66BB6A);">
+                            <i class="fas fa-check-double"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="completedTasks">0</h3>
+                            <p>Completed</p>
+                        </div>
+                        <div class="stat-trend up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>8%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #FF9800, #FFB74D);">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="pendingTasks">0</h3>
+                            <p>Pending</p>
+                        </div>
+                        <div class="stat-trend down">
+                            <i class="fas fa-arrow-down"></i>
+                            <span>5%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #F44336, #EF5350);">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="overdueTasks">0</h3>
+                            <p>Overdue</p>
+                        </div>
+                        <div class="stat-trend down">
+                            <i class="fas fa-arrow-down"></i>
+                            <span>3%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-grid">
+                    <div class="card card-lg">
+                        <div class="card-header">
+                            <h3>Quick Add Task</h3>
+                            <p>Add a new task to your list</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="task-input-container">
+                                <div class="input-group">
+                                    <input type="text" id="taskInput" placeholder="What needs to be done?">
+                                    <button class="btn-primary" id="addBtn">
+                                        <i class="fas fa-plus"></i>
+                                        Add Task
+                                    </button>
+                                </div>
+                                
+                                <div class="input-options">
+                                    <div class="option-group">
+                                        <label class="option-label">
+                                            <input type="checkbox" id="importantCheckbox">
+                                            <span class="checkmark"></span>
+                                            <i class="fas fa-star"></i>
+                                            Important
+                                        </label>
+                                        
+                                        <label class="option-label">
+                                            <input type="checkbox" id="todayCheckbox">
+                                            <span class="checkmark"></span>
+                                            <i class="fas fa-calendar-day"></i>
+                                            Today
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="date-picker">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <input type="date" id="taskDueDate">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card card-lg">
+                        <div class="card-header">
+                            <h3>Recent Tasks</h3>
+                            <p>Your latest activities</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="tasks-container" id="recentTasksContainer">
+                                <!-- Recent tasks will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Productivity Chart</h3>
+                            <p>Weekly completion rate</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="productivityChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Task Categories</h3>
+                            <p>Distribution by priority</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="categories-container">
+                                <div class="category-item">
+                                    <div class="category-color" style="background-color: #F44336;"></div>
+                                    <div class="category-info">
+                                        <h4>High Priority</h4>
+                                        <p>12 tasks</p>
+                                    </div>
+                                    <div class="category-percent">30%</div>
+                                </div>
+                                <div class="category-item">
+                                    <div class="category-color" style="background-color: #FF9800;"></div>
+                                    <div class="category-info">
+                                        <h4>Medium Priority</h4>
+                                        <p>18 tasks</p>
+                                    </div>
+                                    <div class="category-percent">45%</div>
+                                </div>
+                                <div class="category-item">
+                                    <div class="category-color" style="background-color: #4CAF50;"></div>
+                                    <div class="category-info">
+                                        <h4>Low Priority</h4>
+                                        <p>10 tasks</p>
+                                    </div>
+                                    <div class="category-percent">25%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
             
-            <div class="tasks-container" id="tasksContainer">
-                <!-- Tasks will be added here dynamically -->
-                <div class="empty-state" id="emptyState">
-                    <i class="fas fa-clipboard-list"></i>
-                    <h3>No tasks yet</h3>
-                    <p>Add a task above to get started!</p>
+            <!-- Tasks View -->
+            <section class="view-section" id="tasksView">
+                <div class="view-header">
+                    <h2>All Tasks</h2>
+                    <div class="view-actions">
+                        <div class="filter-dropdown">
+                            <button class="dropdown-toggle">
+                                <i class="fas fa-filter"></i>
+                                Filter
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="dropdown-menu">
+                                <button class="dropdown-item active" data-filter="all">All Tasks</button>
+                                <button class="dropdown-item" data-filter="today">Today</button>
+                                <button class="dropdown-item" data-filter="important">Important</button>
+                                <button class="dropdown-item" data-filter="completed">Completed</button>
+                                <button class="dropdown-item" data-filter="pending">Pending</button>
+                            </div>
+                        </div>
+                        
+                        <div class="sort-dropdown">
+                            <button class="dropdown-toggle">
+                                <i class="fas fa-sort-amount-down"></i>
+                                Sort By
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="dropdown-menu">
+                                <button class="dropdown-item active" data-sort="date">Due Date</button>
+                                <button class="dropdown-item" data-sort="priority">Priority</button>
+                                <button class="dropdown-item" data-sort="name">Name</button>
+                                <button class="dropdown-item" data-sort="created">Created Date</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body">
+                        <div class="tasks-container" id="allTasksContainer">
+                            <!-- All tasks will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Today's Tasks View -->
+            <section class="view-section" id="todayView">
+                <div class="view-header">
+                    <h2>Today's Tasks</h2>
+                    <p class="view-subtitle" id="todayDate"></p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body">
+                        <div class="tasks-container" id="todayTasksContainer">
+                            <!-- Today's tasks will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Important Tasks View -->
+            <section class="view-section" id="importantView">
+                <div class="view-header">
+                    <h2>Important Tasks</h2>
+                    <p class="view-subtitle">High priority tasks marked with star</p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body">
+                        <div class="tasks-container" id="importantTasksContainer">
+                            <!-- Important tasks will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Completed Tasks View -->
+            <section class="view-section" id="completedView">
+                <div class="view-header">
+                    <h2>Completed Tasks</h2>
+                    <p class="view-subtitle">Tasks you've finished</p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body">
+                        <div class="tasks-container" id="completedTasksContainer">
+                            <!-- Completed tasks will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <!-- Notification Panel -->
+        <div class="notification-panel" id="notificationPanel">
+            <div class="panel-header">
+                <h3>Notifications</h3>
+                <button class="panel-close" id="notificationClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="panel-body">
+                <div class="notification-item">
+                    <div class="notification-icon success">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="notification-content">
+                        <h4>Task Completed</h4>
+                        <p>"Finish project proposal" was marked as completed</p>
+                        <span class="notification-time">2 hours ago</span>
+                    </div>
+                </div>
+                <div class="notification-item">
+                    <div class="notification-icon warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="notification-content">
+                        <h4>Task Due Soon</h4>
+                        <p>"Team meeting preparation" is due in 3 hours</p>
+                        <span class="notification-time">5 hours ago</span>
+                    </div>
+                </div>
+                <div class="notification-item">
+                    <div class="notification-icon info">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <div class="notification-content">
+                        <h4>New Feature</h4>
+                        <p>Dark mode is now available in settings</p>
+                        <span class="notification-time">1 day ago</span>
+                    </div>
                 </div>
             </div>
         </div>
         
-        <div class="footer">
-            <p>Tasks are saved automatically in your browser. Made with <i class="fas fa-heart"></i> by <a href="#" class="footer-link">Nexus Tasks</a></p>
+        <!-- Settings Panel -->
+        <div class="settings-panel" id="settingsPanel">
+            <div class="panel-header">
+                <h3>Settings</h3>
+                <button class="panel-close" id="settingsClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="panel-body">
+                <div class="settings-section">
+                    <h4>Appearance</h4>
+                    <div class="settings-option">
+                        <span>Theme</span>
+                        <div class="theme-switch">
+                            <button class="theme-option active" data-theme="light">
+                                <i class="fas fa-sun"></i>
+                                Light
+                            </button>
+                            <button class="theme-option" data-theme="dark">
+                                <i class="fas fa-moon"></i>
+                                Dark
+                            </button>
+                            <button class="theme-option" data-theme="auto">
+                                <i class="fas fa-adjust"></i>
+                                Auto
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-option">
+                        <span>Animation Speed</span>
+                        <select class="settings-select">
+                            <option value="fast">Fast</option>
+                            <option value="normal" selected>Normal</option>
+                            <option value="slow">Slow</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h4>Task Management</h4>
+                    <div class="settings-option">
+                        <span>Confirm before deleting</span>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="settings-option">
+                        <span>Show completed tasks</span>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="settings-option">
+                        <span>Default due date</span>
+                        <select class="settings-select">
+                            <option value="today">Today</option>
+                            <option value="tomorrow" selected>Tomorrow</option>
+                            <option value="week">Next Week</option>
+                            <option value="month">Next Month</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h4>Data Management</h4>
+                    <div class="settings-option">
+                        <span>Export tasks</span>
+                        <button class="btn-outline">
+                            <i class="fas fa-download"></i>
+                            Export as JSON
+                        </button>
+                    </div>
+                    
+                    <div class="settings-option">
+                        <span>Clear all data</span>
+                        <button class="btn-danger">
+                            <i class="fas fa-trash"></i>
+                            Clear Data
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Floating Action Button -->
+        <button class="fab" id="fab">
+            <i class="fas fa-plus"></i>
+        </button>
+        
+        <!-- Toast Notification -->
+        <div class="toast" id="toast">
+            <div class="toast-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="toast-content">
+                <h4 class="toast-title">Success</h4>
+                <p class="toast-message">Task added successfully!</p>
+            </div>
+            <button class="toast-close">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
     </div>
 
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Main JavaScript -->
     <script src="script.js"></script>
 </body>
 </html>
